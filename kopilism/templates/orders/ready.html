@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Order Ready — Kopilism{% endblock %}
+
+{% block content %}
+<section class="ready-screen" id="waiting-screen" {% if order.status == 'ready' %}style="display:none"{% endif %}>
+  <div class="ready-icon">⏳</div>
+  <h1 class="section-title">We're <em>Preparing</em> Your Order</h1>
+  <p class="section-sub">Sit back and relax. We'll notify you right here when your order is ready.<br>
+    <strong style="color:var(--gold)">Order #{{ order.pk }}</strong>
+  </p>
+  <div class="status-badge status--{{ order.status }}">{{ order.get_status_display }}</div>
+  <p class="polling-note">This page updates automatically…</p>
+</section>
+
+<section class="ready-screen" id="ready-screen" {% if order.status != 'ready' %}style="display:none"{% endif %}>
+  <div class="ready-icon">☕</div>
+  <h1 class="section-title">Your Order is <em>Ready!</em></h1>
+  <p class="section-sub">Please proceed to the counter to collect your order.<br>Thank you for choosing Kopilism.</p>
+
+  <!-- Receipt -->
+  <div class="receipt">
+    <div class="receipt-header">
+      <div class="receipt-logo">KOPILISM</div>
+      <div class="receipt-meta">Order #{{ order.pk }}</div>
+      <div class="receipt-meta">{{ order.created_at|date:"F j, Y · g:i A" }}</div>
+    </div>
+
+    <div class="receipt-items">
+      {% for item in order.items.all %}
+      <div class="receipt-row">
+        <span>{{ item.menu_item.name }} <span class="qty-badge">×{{ item.quantity }}</span></span>
+        <span>₱{{ item.subtotal }}</span>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="receipt-total-row">
+      <span>Total Paid</span>
+      <span>₱{{ order.total_amount }}</span>
+    </div>
+
+    <div class="receipt-method">Paid via {{ order.get_payment_method_display }}</div>
+    {% if order.customer_name %}
+      <div class="receipt-method">Customer: {{ order.customer_name }}</div>
+    {% endif %}
+    {% if order.table_number %}
+      <div class="receipt-method">Table: {{ order.table_number }}</div>
+    {% endif %}
+
+    <div class="receipt-thanks">Thank you for dining with us ✦</div>
+  </div>
+
+  <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:2rem">
+    <a href="{% url 'home' %}" class="btn btn--outline">Back to Home</a>
+    <a href="{% url 'menu' %}" class="btn btn--primary">Order Again</a>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  {% if order.status != 'ready' %}
+  // Poll every 5 seconds until order is ready
+  const orderId = {{ order.pk }};
+  const pollInterval = setInterval(async () => {
+    try {
+      const res = await fetch(`/orders/status/${orderId}/`);
+      const data = await res.json();
+      if (data.status === 'ready') {
+        clearInterval(pollInterval);
+        document.getElementById('waiting-screen').style.display = 'none';
+        document.getElementById('ready-screen').style.display = 'flex';
+      } else {
+        const badge = document.querySelector('.status-badge');
+        if (badge) badge.textContent = data.status_display;
+      }
+    } catch(e) { /* silent */ }
+  }, 5000);
+  {% endif %}
+</script>
+{% endblock %}

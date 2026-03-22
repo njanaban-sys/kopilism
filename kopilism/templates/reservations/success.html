@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Reservation Confirmed — Kopilism{% endblock %}
+
+{% block content %}
+<section class="success-screen">
+  <div class="success-icon">📅</div>
+  <h1 class="section-title">Reservation <em>Confirmed!</em></h1>
+  <p class="section-sub">Thank you! We'll send a confirmation to your phone shortly.<br>We look forward to seeing you at Kopilism.</p>
+  <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:2.5rem">
+    <a href="{% url 'home' %}" class="btn btn--outline">Back to Home</a>
+    <a href="{% url 'menu' %}" class="btn btn--primary">Browse Menu</a>
+  </div>
+</section>
+{% endblock %}

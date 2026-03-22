@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Kopilism Café{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:wght@300;400;600&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="navbar">
+  <a class="nav-logo" href="{% url 'home' %}">KOPILISM</a>
+  <ul class="nav-links">
+    <li><a href="{% url 'menu' %}">Menu</a></li>
+    <li><a href="{% url 'reservation' %}">Reserve</a></li>
+    <li><a href="{% url 'order_checkout' %}" class="nav-cta">Order Now</a></li>
+  </ul>
+</nav>
+
+{% if messages %}
+  <div class="messages">
+    {% for message in messages %}
+      <div class="message message--{{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+{% block content %}{% endblock %}
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-logo">KOPILISM</div>
+    <p class="footer-tagline">Where every cup is a philosophy</p>
+    <div class="footer-info">
+      <span>Davao City, Philippines</span>
+      <span class="footer-dot">·</span>
+      <span>Mon–Fri 8AM–9PM &nbsp;|&nbsp; Sat–Sun 9AM–10PM</span>
+    </div>
+  </div>
+</footer>
+
+<script src="{% static 'js/main.js' %}"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

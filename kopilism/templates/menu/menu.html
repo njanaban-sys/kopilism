@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Menu — Kopilism Café{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="section-eyebrow">What We Offer</div>
+  <h1 class="section-title">Our <em>Menu</em></h1>
+</section>
+
+<section class="menu-section">
+  <!-- Category Tabs -->
+  <div class="menu-tabs">
+    {% for cat in categories %}
+      <a href="?category={{ cat.slug }}"
+         class="tab-btn {% if cat == active_category %}active{% endif %}">
+        {{ cat.name }}
+      </a>
+    {% endfor %}
+  </div>
+
+  <!-- Items Grid -->
+  <div class="menu-grid" id="menu-grid">
+    {% for item in items %}
+    <div class="menu-item" data-id="{{ item.pk }}" data-price="{{ item.price }}" data-name="{{ item.name }}">
+      {% if item.image %}
+        <img src="{{ item.image.url }}" alt="{{ item.name }}" class="menu-item-img">
+      {% else %}
+        <div class="menu-item-emoji">{{ item.emoji }}</div>
+      {% endif %}
+      <div class="menu-item-body">
+        <div class="menu-item-name">{{ item.name }}</div>
+        <div class="menu-item-desc">{{ item.description }}</div>
+        <div class="menu-item-footer">
+          <span class="menu-item-price">₱{{ item.price }}</span>
+          <button class="add-btn" onclick="addToCart({{ item.pk }}, '{{ item.name }}', {{ item.price }})">+</button>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+      <p class="empty-msg">No items available in this category right now.</p>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- Floating Cart Bar -->
+<div class="cart-bar" id="cart-bar" style="display:none">
+  <div class="cart-info">
+    <span class="cart-count" id="cart-count">0</span>
+    <span class="cart-text">items in your order</span>
+  </div>
+  <span class="cart-total" id="cart-total-bar">₱0.00</span>
+  <a href="{% url 'order_checkout' %}" class="btn btn--primary btn--sm">Proceed to Payment</a>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // Load cart from sessionStorage so it persists across pages
+  let cart = JSON.parse(sessionStorage.getItem('kopilism_cart') || '[]');
+  updateCartBar();
+
+  function addToCart(id, name, price) {
+    const existing = cart.find(i => i.id === id);
+    if (existing) {
+      existing.quantity += 1;
+    } else {
+      cart.push({ id, name, price: parseFloat(price), quantity: 1 });
+    }
+    sessionStorage.setItem('kopilism_cart', JSON.stringify(cart));
+    updateCartBar();
+    showAddedFeedback(id);
+  }
+
+  function updateCartBar() {
+    const count = cart.reduce((s, i) => s + i.quantity, 0);
+    const total = cart.reduce((s, i) => s + i.quantity * i.price, 0);
+    document.getElementById('cart-count').textContent = count;
+    document.getElementById('cart-total-bar').textContent = '₱' + total.toFixed(2);
+    document.getElementById('cart-bar').style.display = count > 0 ? 'flex' : 'none';
+  }
+
+  function showAddedFeedback(id) {
+    const card = document.querySelector(`[data-id="${id}"] .add-btn`);
+    if (card) {
+      card.textContent = '✓';
+      card.style.background = 'var(--gold)';
+      card.style.color = 'var(--espresso)';
+      setTimeout(() => { card.textContent = '+'; card.style.background = ''; card.style.color = ''; }, 800);
+    }
+  }
+</script>
+{% endblock %}

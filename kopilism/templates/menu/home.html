@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Kopilism Café — Davao City{% endblock %}
+
+{% block content %}
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-pattern"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Est. Davao City &nbsp;·&nbsp; Specialty Coffee</div>
+    <h1 class="hero-title">Kopi<em>lism</em></h1>
+    <p class="hero-sub">Where every cup is a philosophy</p>
+    <div class="hero-divider"></div>
+    <div class="hero-cta">
+      <a href="{% url 'menu' %}" class="btn btn--primary">Browse Menu</a>
+      <a href="{% url 'reservation' %}" class="btn btn--outline">Book a Table</a>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <div class="scroll-arrow"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- ABOUT STRIP -->
+<section class="about-strip">
+  <div class="about-strip-inner">
+    <div class="strip-item">
+      <div class="strip-icon">☕</div>
+      <div class="strip-label">Specialty Coffee</div>
+    </div>
+    <div class="strip-divider"></div>
+    <div class="strip-item">
+      <div class="strip-icon">🥐</div>
+      <div class="strip-label">Fresh Pastries Daily</div>
+    </div>
+    <div class="strip-divider"></div>
+    <div class="strip-item">
+      <div class="strip-icon">📅</div>
+      <div class="strip-label">Table Reservations</div>
+    </div>
+    <div class="strip-divider"></div>
+    <div class="strip-item">
+      <div class="strip-icon">💳</div>
+      <div class="strip-label">GCash · PayPal · Cash</div>
+    </div>
+  </div>
+</section>
+
+<!-- MENU PREVIEW -->
+<section class="section section--dark">
+  <div class="section-header">
+    <div class="section-eyebrow">Taste the Philosophy</div>
+    <h2 class="section-title">Our <em>Menu</em></h2>
+    <p class="section-sub">Handcrafted drinks, freshly baked pastries, and light meals served with care.</p>
+  </div>
+  <div class="preview-grid">
+    <a href="{% url 'menu' %}?category=coffee" class="preview-card">
+      <div class="preview-emoji">☕</div>
+      <div class="preview-name">Coffee</div>
+      <div class="preview-hint">Espresso · Latte · Cold Brew</div>
+    </a>
+    <a href="{% url 'menu' %}?category=noncoffee" class="preview-card">
+      <div class="preview-emoji">🍵</div>
+      <div class="preview-name">Non-Coffee</div>
+      <div class="preview-hint">Matcha · Taro · Soda</div>
+    </a>
+    <a href="{% url 'menu' %}?category=pastries" class="preview-card">
+      <div class="preview-emoji">🥐</div>
+      <div class="preview-name">Pastries</div>
+      <div class="preview-hint">Ensaymada · Croissant · Tarts</div>
+    </a>
+    <a href="{% url 'menu' %}?category=meals" class="preview-card">
+      <div class="preview-emoji">🥑</div>
+      <div class="preview-name">Light Meals</div>
+      <div class="preview-hint">Toast · Pasta · Bowls</div>
+    </a>
+  </div>
+  <div style="text-align:center;margin-top:3rem">
+    <a href="{% url 'menu' %}" class="btn btn--outline">View Full Menu</a>
+  </div>
+</section>
+
+<!-- RESERVATION CTA -->
+<section class="section section--reserve-cta">
+  <div class="reserve-cta-inner">
+    <div class="section-eyebrow">Dine With Us</div>
+    <h2 class="section-title">Reserve Your <em>Table</em></h2>
+    <p class="section-sub">Secure your spot for an unhurried experience. Payment only when your order is ready.</p>
+    <a href="{% url 'reservation' %}" class="btn btn--primary" style="margin-top:2rem">Book a Table</a>
+  </div>
+</section>
+
+{% endblock %}

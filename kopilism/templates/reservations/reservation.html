@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Reserve a Table — Kopilism Café{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="section-eyebrow">Dine With Us</div>
+  <h1 class="section-title">Reserve a <em>Table</em></h1>
+</section>
+
+<section class="section reservation-section">
+  <div class="reservation-grid">
+
+    <!-- Form -->
+    <div class="reservation-form-wrap">
+      <form method="post" class="reservation-form">
+        {% csrf_token %}
+        <div class="form-group">
+          <label>Full Name</label>
+          {{ form.full_name }}
+          {% if form.full_name.errors %}<span class="form-error">{{ form.full_name.errors.0 }}</span>{% endif %}
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Phone Number</label>
+            {{ form.phone }}
+          </div>
+          <div class="form-group">
+            <label>Email (optional)</label>
+            {{ form.email }}
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Date</label>
+            {{ form.date }}
+          </div>
+          <div class="form-group">
+            <label>Time</label>
+            {{ form.time }}
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Number of Guests</label>
+          {{ form.guests }}
+        </div>
+        <div class="form-group">
+          <label>Special Requests</label>
+          {{ form.special_requests }}
+        </div>
+        <button type="submit" class="btn btn--primary" style="width:100%;margin-top:0.5rem">Confirm Reservation</button>
+      </form>
+    </div>
+
+    <!-- Info -->
+    <div class="reservation-info">
+      <div class="info-card">
+        <h4>Opening Hours</h4>
+        <p>Monday – Friday &nbsp;·&nbsp; 8:00 AM – 9:00 PM<br>
+           Saturday – Sunday &nbsp;·&nbsp; 9:00 AM – 10:00 PM</p>
+      </div>
+      <div class="info-card">
+        <h4>Location</h4>
+        <p>Kopilism Café<br>Davao City, Philippines</p>
+      </div>
+      <div class="info-card">
+        <h4>Payment Policy</h4>
+        <p>Payment is only collected once your food and drinks are ready to be served. No upfront charge.</p>
+      </div>
+      <div class="info-card">
+        <h4>Reservation Policy</h4>
+        <p>Tables are held for 15 minutes past your booking time. For groups of 6+, please call us directly.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+{% endblock %}
